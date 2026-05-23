@@ -4,9 +4,38 @@ using System.Linq;
 
 const string NewHeader = "Filename,DESCRIPTION,SKETCHBOOK_NUMBER,PAGE_NUMBER,SKETCH_DT,,";
 
-if (args.Length < 1)
+void PrintUsage()
 {
     Console.WriteLine("Usage: FixCsv <directory>");
+    Console.WriteLine();
+    Console.WriteLine("  <directory>   folder containing *.csv files to normalize in-place");
+    Console.WriteLine();
+    Console.WriteLine("Options:");
+    Console.WriteLine("  -h, --help, -?, /?, ?   show this help and exit");
+    Console.WriteLine();
+    Console.WriteLine("Replaces the header on every CSV in the folder and strips a trailing");
+    Console.WriteLine(".tif extension from the first (Filename) field on each row.");
+}
+
+if (args.Any(a => a is "-h" or "--help" or "-?" or "/?" or "?"))
+{
+    PrintUsage();
+    return 0;
+}
+foreach (var a in args)
+{
+    if (a.StartsWith("-") || a.StartsWith("/"))
+    {
+        Console.WriteLine($"Unknown option: {a}");
+        Console.WriteLine();
+        PrintUsage();
+        return 1;
+    }
+}
+
+if (args.Length < 1)
+{
+    PrintUsage();
     return 1;
 }
 
